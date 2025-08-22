@@ -13,6 +13,7 @@ LD       = $(CC)
 STRIP    = $(CROSS_COMPILE)strip
 OBJCOPY  = $(CROSS_COMPILE)objcopy
 OBJDUMP  = $(CROSS_COMPILE)objdump
+PKG_CONFIG = $(CROSS_COMPILE)pkg-config
 PYTHON   = python3
 
 HAS_SWIG := $(shell swig -version 2>/dev/null)
@@ -22,11 +23,11 @@ HAS_PYTHON_CONFIG := $(shell ${PYTHON}-config --ldflags ${PYTHON_EMBED} 2>/dev/n
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -I. -I$(VPATH) -I$(VPATH)/../lib/uthash/include
 CFLAGS   += -g -Wall -Wextra -O2
-CFLAGS   += $(shell pkg-config --cflags talloc)
+CFLAGS   += $(shell $(PKG_CONFIG) --cflags talloc)
 LDFLAGS  += -Wl,-z,noexecstack
-LDFLAGS  += $(shell pkg-config --libs talloc)
+LDFLAGS  += $(shell $(PKG_CONFIG) --libs talloc)
 
-CARE_LDFLAGS  = $(shell pkg-config --libs libarchive)
+CARE_LDFLAGS  = $(shell $(PKG_CONFIG) --libs libarchive)
 
 OBJECTS += \
 	cli/cli.o		\
